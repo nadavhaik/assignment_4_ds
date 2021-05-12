@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.Comparator;
-
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class BTree<T extends Comparable<T>> {
@@ -9,7 +7,7 @@ public class BTree<T extends Comparable<T>> {
 
     protected Node<T> root = null;
     protected int size = 0;
-    
+    protected Deque<Object> backtrackDeque = new LinkedList<>();
     //You may add fields here.
 
     /**
@@ -41,10 +39,12 @@ public class BTree<T extends Comparable<T>> {
      * @param value - the inserted value
      */
     public void insert(T value) {
-    	
+        backtrackDeque.addLast(null);
         if (root == null) {
             root = new Node<T>(null, maxDegree);
             root.addKey(value);
+            backtrackDeque.addLast(root);
+            backtrackDeque.addLast(value);
         } else {
             Node<T> currentNode = root;
             boolean wasAdded = false;
@@ -52,18 +52,22 @@ public class BTree<T extends Comparable<T>> {
             	
             	// If the node has 2t-1 keys then split it
                 if (currentNode.getNumberOfKeys() == maxDegree - 1) {
-                	
-                	split(currentNode);
-                	
+                    Node beforeSplit = currentNode;
+                	T mv = split(currentNode);
                 	// Return to the parent and descend to the needed node
                 	currentNode = currentNode.parent != null ? currentNode.parent : root;
+                	backtrackDeque.addLast(currentNode);
+                    backtrackDeque.addLast(mv);
+                    backtrackDeque.addLast(beforeSplit);
                     int idx = currentNode.getValuePosition(value);
                     currentNode = currentNode.getChild(idx);
                 }
                 
                 // Descend the tree and add the key to a leaf
                 if (currentNode.isLeaf()) {
-                	currentNode.addKey(value);
+                    backtrackDeque.addLast(currentNode);
+                    backtrackDeque.addLast(value);
+                    currentNode.addKey(value);
                 	wasAdded = true;
                 } else {
                     int idx = currentNode.getValuePosition(value);

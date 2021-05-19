@@ -34,6 +34,12 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 	//Change the list returned to a list of integers answering the requirements
 	public static List<Integer> BTreeBacktrackingCounterExample(){
 	    List<Integer> values = new ArrayList<>();
+	    // B-Tree with t = 2
+	    values.add(5);
+		values.add(6);
+		values.add(7);
+
+		values.add(8);
 	    return values;
 	}
 }

@@ -29,7 +29,7 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 			parent.addChild(split);
 			split = (Node<T>)backtrackDeque.pollLast();
 		}
-    } //check
+    }
 	
 	//Change the list returned to a list of integers answering the requirements
 	public static List<Integer> BTreeBacktrackingCounterExample(){

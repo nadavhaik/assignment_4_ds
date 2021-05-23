@@ -6,6 +6,9 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 	//You are to implement the function Backtrack.
 	@SuppressWarnings("unchecked")
 	public void Backtrack() {
+		IntegrityStatement.signature();
+		if(backtrackDeque.isEmpty())
+			return;
 	    T keyToDelete = (T)backtrackDeque.pollLast();
 	    Node<T> n = (Node<T>) backtrackDeque.pollLast();
 	    n.removeKey(keyToDelete);
@@ -24,9 +27,21 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 			Node<T> leftChild = parent.getChild(mvIndex);
 			Node<T> rightChild = parent.getChild(mvIndex+1);
 			parent.removeKey(mvIndex);
-			parent.removeChild(leftChild);
-			parent.removeChild(rightChild);
-			parent.addChild(split);
+			if(parent.numOfKeys > 0) {
+				parent.removeChild(leftChild);
+				parent.removeChild(rightChild);
+				parent.addChild(split);
+			} else {
+				if(parent.parent == null) {
+					root = split;
+					split.parent = null;
+				} else {
+					Node<T> grandParent = parent.parent;
+					grandParent.removeChild(parent);
+					grandParent.addChild(split);
+					split.parent = grandParent;
+				}
+			}
 			split = (Node<T>)backtrackDeque.pollLast();
 		}
     }

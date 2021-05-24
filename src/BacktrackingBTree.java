@@ -2,6 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
+	public BacktrackingBTree(int order) {
+		super(order);
+	}
+	public BacktrackingBTree() {
+		super();
+	}
 
 	//You are to implement the function Backtrack.
 	@SuppressWarnings("unchecked")
@@ -31,6 +37,7 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 				parent.removeChild(leftChild);
 				parent.removeChild(rightChild);
 				parent.addChild(split);
+				split.parent = parent;
 			} else {
 				if(parent.parent == null) {
 					root = split;
@@ -41,6 +48,10 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 					grandParent.addChild(split);
 					split.parent = grandParent;
 				}
+			}
+			for(Node<T> child : split.children) {
+				if (child != null)
+					child.parent = split;
 			}
 			split = (Node<T>)backtrackDeque.pollLast();
 		}

@@ -56,16 +56,27 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 			split = (Node<T>)backtrackDeque.pollLast();
 		}
     }
-	
+
 	//Change the list returned to a list of integers answering the requirements
 	public static List<Integer> BTreeBacktrackingCounterExample(){
-	    List<Integer> values = new ArrayList<>();
-	    // B-Tree with t = 2
-	    values.add(5);
-		values.add(6);
-		values.add(7);
+		IntegrityStatement.signature();
+		List<Integer> values = new ArrayList<>();
 
-		values.add(8);
-	    return values;
+		// talk to haik - the paper says t=2 but the forum says for all t.
+
+		// this one is for all t.
+		int i = 1;
+		for (i = 1; i < maxDegree; i++){
+			values.add(i);
+		}
+		values.add(i+1);
+
+		// this one is for B-Tree with t = 2
+//	    values.add(5);
+//		values.add(6);
+//		values.add(7);
+//
+//		values.add(8);
+		return values;
 	}
 }

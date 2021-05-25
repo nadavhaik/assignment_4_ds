@@ -16,9 +16,10 @@ public class AVLTree implements Iterable<Integer> {
             this.value = val;
         }
     }
-    
+
     protected Node root;
-    
+    protected Deque<Object> backtrackDeque = new LinkedList<>();
+
     //You may add fields here.
     
     public AVLTree() {
@@ -34,6 +35,9 @@ public class AVLTree implements Iterable<Integer> {
 		/* 1.  Perform the normal BST search and insert */
         if (node == null) {
         	Node inserted_node = new Node(value);
+            backtrackDeque.addLast(inserted_node);
+            backtrackDeque.addLast(null);
+            backtrackDeque.addLast(null);
             return inserted_node;
         }
 
@@ -55,14 +59,30 @@ public class AVLTree implements Iterable<Integer> {
 
         // Left Left Case
         int balance = getBalanceFactor(node);
-        
+        if (balance > 1 || balance < -1){
+            T tmpCase = (T)backtrackDeque.pollLast();
+            T tmpFirstOutOfBalance = (T)backtrackDeque.pollLast();
+            if(tmpFirstOutOfBalance == null) {
+                backtrackDeque.addLast(node);
+                backtrackDeque.addLast(tmpCase);
+            }
+            else {
+                backtrackDeque.addLast(tmpFirstOutOfBalance);
+                backtrackDeque.addLast(tmpCase)
+            }
+        }
+
         // Left Cases            
         if (balance > 1) {
             if (value > node.left.value) {
                 node.left = leftRotate(node.left);
+                backtrackDeque.addLast(ImbalanceCases.LEFT_RIGHT);
             }
+            else
+                backtrackDeque.addLast(ImbalanceCases.LEFT_LEFT);
             
             node = rightRotate(node);
+
         } // Right Cases
         else if (balance < -1) {
             if (value < node.right.value) {
@@ -74,7 +94,7 @@ public class AVLTree implements Iterable<Integer> {
 
         return node;
     }
-    
+
     protected Node rightRotate(Node y) {
         Node x = y.left;
         Node T2 = x.right;
@@ -82,17 +102,17 @@ public class AVLTree implements Iterable<Integer> {
         // Perform rotation
         x.right = y;
         y.left = T2;
-        
+
         //Update parents
         if(T2 != null) {
-        	T2.parent = y;
+            T2.parent = y;
         }
-        
+
         x.parent = y.parent;
         y.parent = x;
-        
-        updateHeight(x);
+
         updateHeight(y);
+        updateHeight(x);
 
         // Return new root
         return x;

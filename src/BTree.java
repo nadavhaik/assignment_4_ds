@@ -150,10 +150,10 @@ public class BTree<T extends Comparable<T>> {
     protected Node<T> getNode(T value) {
         Node<T> node = root;
         boolean found = false;
-        
+
         while (node != null && !found) {
             int idx = node.getValuePosition(value);
-            if (idx < node.getNumberOfKeys() && node.getKey(idx) == value) {
+            if (idx < node.getNumberOfKeys() && node.getKey(idx).compareTo(value) == 0) {
                 found = true;
             } else if (!node.isLeaf()){
                 node = node.getChild(idx);
@@ -161,7 +161,7 @@ public class BTree<T extends Comparable<T>> {
                 node = null;
             }
         }
-        
+
         return node;
     }
 

@@ -6,7 +6,26 @@ public class BacktrackingAVL extends AVLTree {
 	//You are to implement the function Backtrack.
     public void Backtrack() {
         IntegrityStatement.signature(); // Reminder!
-        T keyToDelete = (T)backtrackDeque.pollLast();
+        if (backtrackDeque.isEmpty())
+            return;
+        ImbalanceCases ourCase = (ImbalanceCases)backtrackDeque.pollLast();
+        node<Integer> FirstOutOfBalance = (node<Integer>)backtrackDeque.pollLast();
+        node<Integer> keyToDelete = (node<Integer>)backtrackDeque.pollLast();
+        if(FirstOutOfBalance == null) {
+            node<Integer> currParent = keyToDelete.parent;
+            if (currParent.left == keyToDelete) {
+                keyToDelete.parent = null;
+                currParent.left = null;
+            }
+            else{
+                keyToDelete.parent = null;
+                currParent.right = null;
+            }
+
+
+
+        }
+
     } 
     
     //Change the list returned to a list of integers answering the requirements

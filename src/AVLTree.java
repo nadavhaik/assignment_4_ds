@@ -75,8 +75,8 @@ public class AVLTree implements Iterable<Integer> {
         // Left Cases            
         if (balance > 1) {
             if (value > node.left.value) {
-                node.left = leftRotate(node.left);
                 backtrackDeque.addLast(ImbalanceCases.LEFT_RIGHT);
+                node.left = leftRotate(node.left);
             }
             else
                 backtrackDeque.addLast(ImbalanceCases.LEFT_LEFT);
@@ -86,8 +86,11 @@ public class AVLTree implements Iterable<Integer> {
         } // Right Cases
         else if (balance < -1) {
             if (value < node.right.value) {
+                backtrackDeque.addLast(ImbalanceCases.RIGHT_LEFT);
                 node.right = rightRotate(node.right);
             }
+            else
+                backtrackDeque.addLast(ImbalanceCases.RIGHT_RIGHT);
             
             node = leftRotate(node);
         }

@@ -9,24 +9,42 @@ public class BacktrackingAVL extends AVLTree {
         if (backtrackDeque.isEmpty())
             return;
         ImbalanceCases ourCase = (ImbalanceCases)backtrackDeque.pollLast();
-        node<Integer> FirstOutOfBalance = (node<Integer>)backtrackDeque.pollLast();
-        node<Integer> keyToDelete = (node<Integer>)backtrackDeque.pollLast();
+        Node<Integer> FirstOutOfBalance = (node<Integer>)backtrackDeque.pollLast();
+        Node<Integer> NodeToDelete = (node<Integer>)backtrackDeque.pollLast();
+        Node<Integer> rotationNode = NodeToDelete.parent;
         if(FirstOutOfBalance == null) {
-            node<Integer> currParent = keyToDelete.parent;
-            if (currParent.left == keyToDelete) {
-                keyToDelete.parent = null;
-                currParent.left = null;
-            }
-            else{
-                keyToDelete.parent = null;
-                currParent.right = null;
-            }
-
-
-
+            deleteNode(NodeToDelete)
         }
+        else {
+                if (ourCase == LEFT_LEFT) {
+                    rotationNode = leftRotate(rotationNode);
+                }
+                else if (ourCase == LEFT_RIGHT) {
+                    rotationNode = leftRotate(rotationNode);
+                    rotationNode = rightRotate(rotationNode);
+                }
+                else if (ourCase == RIGHT_LEFT) {
+                    rotationNode = rightRotate(rotationNode);
+                    rotationNode = leftRotate(rotationNode);
+                }
+                else if (ourCase == RIGHT_RIGHT) {
+                    rotationNode = rightRotate(rotationNode);
+                }
+            deleteNode(NodeToDelete)
+            }
+        }
+    }
 
-    } 
+    private void deleteNode(Node node) {
+        Node<Integer> currParent = node.parent;
+        if (currParent.left == node) {
+            keyToDelete.parent = null;
+            currParent.left = null;
+        } else {
+            keyToDelete.parent = null;
+            currParent.right = null;
+        }
+    }
     
     //Change the list returned to a list of integers answering the requirements
     public static List<Integer> AVLTreeBacktrackingCounterExample() {
@@ -48,3 +66,4 @@ public class BacktrackingAVL extends AVLTree {
         return values;
     }
 }
+

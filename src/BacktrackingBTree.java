@@ -3,11 +3,13 @@ import java.util.List;
 
 public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 	public BacktrackingBTree(int order) {
-		super(order);
+		super (order);
 	}
+
 	public BacktrackingBTree() {
-		super();
+		super ();
 	}
+
 
 	//You are to implement the function Backtrack.
 	@SuppressWarnings("unchecked")

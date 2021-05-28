@@ -33,7 +33,6 @@ public class AVLTree implements Iterable<Integer> {
         	Node inserted_node = new Node(value);
             backtrackDeque.addLast(inserted_node);
             backtrackDeque.addLast(null);
-//            backtrackDeque.addLast(null);
             return inserted_node;
         }
 
@@ -56,15 +55,12 @@ public class AVLTree implements Iterable<Integer> {
         // Left Left Case
         int balance = getBalanceFactor(node);
         if (balance > 1 || balance < -1){
-//            ImbalanceCases tmpCase = (ImbalanceCases)backtrackDeque.pollLast();
             Node tmpFirstOutOfBalance = (Node)backtrackDeque.pollLast();
             if(tmpFirstOutOfBalance == null) {
                 backtrackDeque.addLast(node);
-//                backtrackDeque.addLast(tmpCase);
             }
             else {
                 backtrackDeque.addLast(tmpFirstOutOfBalance);
-//                backtrackDeque.addLast(tmpCase);
             }
         }
 
@@ -273,7 +269,7 @@ public class AVLTree implements Iterable<Integer> {
         }    
       
     }
-    
+
     public class PreorderIterator extends BaseBSTIterator {
 
         public PreorderIterator(Node root) {

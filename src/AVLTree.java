@@ -44,7 +44,7 @@ public class AVLTree implements Iterable<Integer> {
             node.right = insertNode(node.right, value);
             node.right.parent = node;
         }
-            
+
         /* 2. Update height of this ancestor node */
         node.height = Math.max(getNodeHeight(node.left), getNodeHeight(node.right)) + 1;
 
@@ -54,7 +54,8 @@ public class AVLTree implements Iterable<Integer> {
 
         // Left Left Case
         int balance = getBalanceFactor(node);
-        if (balance > 1 || balance < -1){
+        boolean unBalanced = balance > 1 || balance < -1;
+        if (unBalanced){
             Node tmpFirstOutOfBalance = (Node)backtrackDeque.pollLast();
             if(tmpFirstOutOfBalance == null) {
                 backtrackDeque.addLast(node);
@@ -64,15 +65,17 @@ public class AVLTree implements Iterable<Integer> {
             }
         }
 
-        // Left Cases            
+
+        // Left Cases
         if (balance > 1) {
             if (value > node.left.value) {
                 backtrackDeque.addLast(ImbalanceCases.LEFT_RIGHT);
                 node.left = leftRotate(node.left);
             }
-            else
+            else {
                 backtrackDeque.addLast(ImbalanceCases.LEFT_LEFT);
-            
+            }
+
             node = rightRotate(node);
 
         } // Right Cases
@@ -81,11 +84,13 @@ public class AVLTree implements Iterable<Integer> {
                 backtrackDeque.addLast(ImbalanceCases.RIGHT_LEFT);
                 node.right = rightRotate(node.right);
             }
-            else
+            else {
                 backtrackDeque.addLast(ImbalanceCases.RIGHT_RIGHT);
-            
+            }
             node = leftRotate(node);
         }
+        if (!unBalanced)
+            backtrackDeque.addLast(null);
 
         return node;
     }

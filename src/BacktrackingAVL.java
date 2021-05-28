@@ -14,7 +14,8 @@ public class BacktrackingAVL extends AVLTree {
         ImbalanceCases ourCase = (ImbalanceCases) backtrackDeque.pollLast ();
         Node FirstOutOfBalance = (Node) backtrackDeque.pollLast ();
         Node NodeToDelete = (Node) backtrackDeque.pollLast ();
-        if (FirstOutOfBalance == null) {
+        System.out.println(NodeToDelete.value);
+        if (FirstOutOfBalance == null || ourCase == null ) {
             deleteNode (NodeToDelete);
         } else {
             Node rotationNode1 = FirstOutOfBalance.parent;
@@ -105,12 +106,12 @@ public class BacktrackingAVL extends AVLTree {
         T.insert (30);
         T.insert (60);
         T.insert (35);
-//        T.printTree ();
+        T.printTree ();
 
         System.out.println();
         System.out.println();
 
-        T.insert (32);
+//        T.insert (32);
 //        T.printTree ();
 
 

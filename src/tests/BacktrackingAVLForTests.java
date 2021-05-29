@@ -26,6 +26,13 @@ public class BacktrackingAVLForTests extends BacktrackingAVL {
         return result;
     }
 
+    @Override
+    public void insert(int value) {
+        if(search(value) != null)
+            throw new IllegalArgumentException("value " + value + " is already in the tree!");
+        super.insert(value);
+    }
+
     private Node searchAndAssertExistenceOf(int value) {
         Node n = search(value);
         if(n==null)

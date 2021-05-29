@@ -12,50 +12,46 @@ public class BacktrackingAVL extends AVLTree {
         if (backtrackDeque.isEmpty ())
             return;
         ImbalanceCases ourCase = (ImbalanceCases) backtrackDeque.pollLast ();
-        Node FirstOutOfBalance = (Node) backtrackDeque.pollLast ();
-        Node NodeToDelete = (Node) backtrackDeque.pollLast ();
-        Node NodeParent = NodeToDelete.parent;
-//        System.out.println(NodeToDelete.value);
-        if (FirstOutOfBalance == null || ourCase == null ) {
-            deleteNode (NodeToDelete);
-        } else {
-            Node rotationNode1 = FirstOutOfBalance.parent;
-
-            if (ourCase == ImbalanceCases.LEFT_LEFT) {
-                rotationNode1 = leftRotate (rotationNode1);
-                newPointer(rotationNode1);
-
-            } else if (ourCase == ImbalanceCases.LEFT_RIGHT) {
-                rotationNode1 = leftRotate (rotationNode1);
-                newPointer(rotationNode1);
-                Node rotationNode2 = rotationNode1.left;
-                rotationNode2 = rightRotate (rotationNode2);
-                newPointer(rotationNode2);
-
-            } else if (ourCase == ImbalanceCases.RIGHT_LEFT) {
-                rotationNode1 = rightRotate (rotationNode1);
-                newPointer(rotationNode1);
-                Node rotationNode2 = rotationNode1.right;
-                rotationNode2 = leftRotate (rotationNode2);
-                newPointer(rotationNode2);
-
-            } else if (ourCase == ImbalanceCases.RIGHT_RIGHT) {
-                rotationNode1 = rightRotate (rotationNode1);
-                newPointer(rotationNode1);
+        Node firstOutOfBalance = (Node) backtrackDeque.pollLast ();
+        Node nodeToDelete = (Node) backtrackDeque.pollLast ();
+        Node nodeParent = nodeToDelete.parent;
+        if(ourCase != null) {
+            Node rotationNode1 = firstOutOfBalance.parent;
+            Node rotationNode2;
+            switch(ourCase) {
+                case LEFT_LEFT:
+                    rotationNode1 = leftRotate(rotationNode1);
+                    newPointer(rotationNode1);
+                    break;
+                case LEFT_RIGHT:
+                    rotationNode1 = leftRotate(rotationNode1);
+                    newPointer(rotationNode1);
+                    rotationNode2 = rotationNode1.left;
+                    rotationNode2 = rightRotate(rotationNode2);
+                    newPointer(rotationNode2);
+                    break;
+                case RIGHT_LEFT:
+                    rotationNode1 = rightRotate(rotationNode1);
+                    newPointer(rotationNode1);
+                    rotationNode2 = rotationNode1.right;
+                    rotationNode2 = leftRotate(rotationNode2);
+                    newPointer(rotationNode2);
+                    break;
+                case RIGHT_RIGHT:
+                    rotationNode1 = rightRotate(rotationNode1);
+                    newPointer(rotationNode1);
+                    break;
             }
-            NodeParent = NodeToDelete.parent;
-            deleteNode (NodeToDelete);
+            nodeParent = nodeToDelete.parent;
         }
-        if(NodeParent != null) {
-            while (NodeParent != null) {
-                newHeight(NodeParent);
-                NodeParent = NodeParent.parent;
-            }
-        }
-        else {
+
+        deleteNode(nodeToDelete);
+        if(nodeParent == null)
             root = null;
+        while (nodeParent != null) {
+            newHeight(nodeParent);
+            nodeParent = nodeParent.parent;
         }
-
     }
 
 
@@ -71,16 +67,16 @@ public class BacktrackingAVL extends AVLTree {
     }
 
 
-    private void deleteNode(Node NodeToDelete) {
-        if(NodeToDelete == root)
+    private void deleteNode(Node nodeToDelete) {
+        if(nodeToDelete == root)
             root = null;
         else {
-            Node currParent = NodeToDelete.parent;
-            if (currParent.left == NodeToDelete) {
-                NodeToDelete.parent = null;
+            Node currParent = nodeToDelete.parent;
+            if (currParent.left == nodeToDelete) {
+                nodeToDelete.parent = null;
                 currParent.left = null;
             } else {
-                NodeToDelete.parent = null;
+                nodeToDelete.parent = null;
                 currParent.right = null;
             }
         }
@@ -107,45 +103,6 @@ public class BacktrackingAVL extends AVLTree {
 
         values.add (12);
         return values;
-    }
-
-
-
-    public static void main(String[] args) {
-        BacktrackingAVL T = new BacktrackingAVL();
-        T.insert (40);
-        T.insert (20);
-        T.insert (50);
-        T.insert (10);
-        T.printTree ();
-        T.insert (30);
-        T.insert (60);
-        T.insert (35);
-//        T.printTree ();
-
-        System.out.println();
-        System.out.println();
-
-        T.insert (32);
-//        T.printTree ();
-
-
-//        ImbalanceCases ourCase = (ImbalanceCases) T.getValueS();
-//        Node FirstOutOfBalance = (Node) T.getValueS();
-//        Node NodeToDelete = (Node) T.getValueS();
-//        System.out.println(ourCase);
-//        System.out.println(FirstOutOfBalance.value);
-//        System.out.println(NodeToDelete.value);
-
-
-
-        T.Backtrack();
-        T.Backtrack();
-        T.Backtrack();
-        T.Backtrack();
-        T.printTree ();
-
-
     }
 }
 

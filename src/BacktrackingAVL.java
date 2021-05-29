@@ -46,9 +46,14 @@ public class BacktrackingAVL extends AVLTree {
             NodeParent = NodeToDelete.parent;
             deleteNode (NodeToDelete);
         }
-        while (NodeParent != null) {
-            newHeight(NodeParent);
-            NodeParent = NodeParent.parent;
+        if(NodeParent != null) {
+            while (NodeParent != null) {
+                newHeight(NodeParent);
+                NodeParent = NodeParent.parent;
+            }
+        }
+        else {
+            root = null;
         }
 
     }

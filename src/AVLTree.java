@@ -311,7 +311,4 @@ public class AVLTree implements Iterable<Integer> {
         return new PreorderIterator(this.root);
     }
 
-    public Object getValueS(){
-        return backtrackDeque.pollLast();
-    }
 }

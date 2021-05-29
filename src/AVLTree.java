@@ -33,6 +33,7 @@ public class AVLTree implements Iterable<Integer> {
         	Node inserted_node = new Node(value);
             backtrackDeque.addLast(inserted_node);
             backtrackDeque.addLast(null);
+            backtrackDeque.addLast(null);
             return inserted_node;
         }
 
@@ -56,23 +57,29 @@ public class AVLTree implements Iterable<Integer> {
         int balance = getBalanceFactor(node);
         boolean unBalanced = balance > 1 || balance < -1;
         if (unBalanced){
+            Node tmpCase = (Node)backtrackDeque.pollLast();
             Node tmpFirstOutOfBalance = (Node)backtrackDeque.pollLast();
             if(tmpFirstOutOfBalance == null) {
                 backtrackDeque.addLast(node);
+                backtrackDeque.addLast(tmpCase);
             }
             else {
                 backtrackDeque.addLast(tmpFirstOutOfBalance);
+                backtrackDeque.addLast(tmpCase);
             }
         }
+
 
 
         // Left Cases
         if (balance > 1) {
             if (value > node.left.value) {
+                backtrackDeque.pollLast();
                 backtrackDeque.addLast(ImbalanceCases.LEFT_RIGHT);
                 node.left = leftRotate(node.left);
             }
             else {
+                backtrackDeque.pollLast();
                 backtrackDeque.addLast(ImbalanceCases.LEFT_LEFT);
             }
 
@@ -81,16 +88,16 @@ public class AVLTree implements Iterable<Integer> {
         } // Right Cases
         else if (balance < -1) {
             if (value < node.right.value) {
+                backtrackDeque.pollLast();
                 backtrackDeque.addLast(ImbalanceCases.RIGHT_LEFT);
                 node.right = rightRotate(node.right);
             }
             else {
+                backtrackDeque.pollLast();
                 backtrackDeque.addLast(ImbalanceCases.RIGHT_RIGHT);
             }
             node = leftRotate(node);
         }
-        if (!unBalanced)
-            backtrackDeque.addLast(null);
 
         return node;
     }

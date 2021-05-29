@@ -14,7 +14,8 @@ public class BacktrackingAVL extends AVLTree {
         ImbalanceCases ourCase = (ImbalanceCases) backtrackDeque.pollLast ();
         Node FirstOutOfBalance = (Node) backtrackDeque.pollLast ();
         Node NodeToDelete = (Node) backtrackDeque.pollLast ();
-        System.out.println(NodeToDelete.value);
+        Node NodeParent = NodeToDelete.parent;
+//        System.out.println(NodeToDelete.value);
         if (FirstOutOfBalance == null || ourCase == null ) {
             deleteNode (NodeToDelete);
         } else {
@@ -22,32 +23,38 @@ public class BacktrackingAVL extends AVLTree {
 
             if (ourCase == ImbalanceCases.LEFT_LEFT) {
                 rotationNode1 = leftRotate (rotationNode1);
-                fixRotation(rotationNode1);
+                newPointer(rotationNode1);
 
             } else if (ourCase == ImbalanceCases.LEFT_RIGHT) {
                 rotationNode1 = leftRotate (rotationNode1);
-                fixRotation(rotationNode1);
+                newPointer(rotationNode1);
                 Node rotationNode2 = rotationNode1.left;
                 rotationNode2 = rightRotate (rotationNode2);
-                fixRotation(rotationNode2);
+                newPointer(rotationNode2);
 
             } else if (ourCase == ImbalanceCases.RIGHT_LEFT) {
                 rotationNode1 = rightRotate (rotationNode1);
-                fixRotation(rotationNode1);
+                newPointer(rotationNode1);
                 Node rotationNode2 = rotationNode1.right;
                 rotationNode2 = leftRotate (rotationNode2);
-                fixRotation(rotationNode2);
+                newPointer(rotationNode2);
 
             } else if (ourCase == ImbalanceCases.RIGHT_RIGHT) {
                 rotationNode1 = rightRotate (rotationNode1);
-                fixRotation(rotationNode1);
+                newPointer(rotationNode1);
             }
+            NodeParent = NodeToDelete.parent;
             deleteNode (NodeToDelete);
         }
+        while (NodeParent != null) {
+            newHeight(NodeParent);
+            NodeParent = NodeParent.parent;
+        }
+
     }
 
 
-    private void fixRotation (Node rotationNode){
+    private void newPointer (Node rotationNode){
         if (rotationNode.parent != null){
             if (rotationNode.parent.value > rotationNode.value)
                 rotationNode.parent.left = rotationNode;
@@ -72,6 +79,9 @@ public class BacktrackingAVL extends AVLTree {
                 currParent.right = null;
             }
         }
+    }
+    private void newHeight(Node node) {
+        node.height = Math.max(getNodeHeight(node.left), getNodeHeight(node.right)) + 1;
     }
 
     //Change the list returned to a list of integers answering the requirements
@@ -106,12 +116,12 @@ public class BacktrackingAVL extends AVLTree {
         T.insert (30);
         T.insert (60);
         T.insert (35);
-        T.printTree ();
+//        T.printTree ();
 
         System.out.println();
         System.out.println();
 
-//        T.insert (32);
+        T.insert (32);
 //        T.printTree ();
 
 

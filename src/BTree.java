@@ -39,8 +39,10 @@ public class BTree<T extends Comparable<T>> {
      * @param value - the inserted value
      */
     public void insert(T value) {
+        // inserting a null value - to separate different insertions in the deque.
         backtrackDeque.addLast(null);
         if (root == null) {
+            // inserting the insertion parameters to the top of the deque.
             root = new Node<T>(null, maxDegree);
             root.addKey(value);
             backtrackDeque.addLast(root);
@@ -56,6 +58,7 @@ public class BTree<T extends Comparable<T>> {
                 	T mv = split(currentNode);
                 	// Return to the parent and descend to the needed node
                 	currentNode = currentNode.parent != null ? currentNode.parent : root;
+                	// inserting the split parameters to the top of the deque.
                 	backtrackDeque.addLast(currentNode);
                     backtrackDeque.addLast(mv);
                     backtrackDeque.addLast(beforeSplit);
@@ -65,6 +68,7 @@ public class BTree<T extends Comparable<T>> {
                 
                 // Descend the tree and add the key to a leaf
                 if (currentNode.isLeaf()) {
+                    // inserting the insertion parameters to the top of the deque.
                     backtrackDeque.addLast(currentNode);
                     backtrackDeque.addLast(value);
                     currentNode.addKey(value);

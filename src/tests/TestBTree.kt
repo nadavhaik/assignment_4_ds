@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.random.Random.Default.nextInt
 import kotlin.test.*
 
-fun validateNode(t: BacktrackingBTreeForTests<Int>, n: String, order: Int, isRoot: Boolean=false) {
+fun validateNode(t: BacktrackingBTreeForTests<Int>, n: String?, order: Int, isRoot: Boolean=false) {
     if(n == null)
         return
     val numOfKeys = t.getNumberOfKeys(n)

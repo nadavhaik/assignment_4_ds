@@ -15,8 +15,9 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 	@SuppressWarnings("unchecked")
 	public void Backtrack() {
 		IntegrityStatement.signature();
-		if(backtrackDeque.isEmpty())
+		if(backtrackDeque.isEmpty()) // there's nothing to backtrack
 			return;
+		// first - backtracking the actual insertion
 	    T keyToDelete = (T)backtrackDeque.pollLast();
 	    Node<T> n = (Node<T>) backtrackDeque.pollLast();
 	    n.removeKey(keyToDelete);
@@ -27,8 +28,11 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 			else
 				root = null;
 		}
+
+	    // second - backtracking all the splits (if happened)
 		Node<T> split = (Node<T>)backtrackDeque.pollLast();
 	    while (split != null) {
+	    	// backtracking the split:
 	    	T mv = (T)backtrackDeque.pollLast();
 	    	Node<T> parent = (Node<T>)backtrackDeque.pollLast();
 	    	int mvIndex = parent.indexOf(mv);
@@ -40,7 +44,7 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 				parent.removeChild(rightChild);
 				parent.addChild(split);
 				split.parent = parent;
-			} else {
+			} else { // an edge case that may happen if parent is the actual root
 				if(parent.parent == null) {
 					root = split;
 					split.parent = null;
@@ -51,6 +55,8 @@ public class BacktrackingBTree<T extends Comparable<T>> extends BTree<T> {
 					split.parent = grandParent;
 				}
 			}
+
+			// retrieving the pointers for the children:
 			for(Node<T> child : split.children) {
 				if (child != null)
 					child.parent = split;

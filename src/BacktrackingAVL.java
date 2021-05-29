@@ -9,7 +9,7 @@ public class BacktrackingAVL extends AVLTree {
     //You are to implement the function Backtrack.
     public void Backtrack() {
         IntegrityStatement.signature (); // Reminder!
-        if (backtrackDeque.isEmpty ())
+        if (backtrackDeque.isEmpty ()) //checking if backtrackDeque is empty
             return;
         ImbalanceCases ourCase = (ImbalanceCases) backtrackDeque.pollLast ();
         Node firstOutOfBalance = (Node) backtrackDeque.pollLast ();
@@ -18,7 +18,7 @@ public class BacktrackingAVL extends AVLTree {
         if(ourCase != null) {
             Node rotationNode1 = firstOutOfBalance.parent;
             Node rotationNode2;
-            switch(ourCase) {
+            switch(ourCase) { // fixing the tree according to each case
                 case LEFT_LEFT:
                     rotationNode1 = leftRotate(rotationNode1);
                     newPointer(rotationNode1);
@@ -46,15 +46,15 @@ public class BacktrackingAVL extends AVLTree {
         }
 
         deleteNode(nodeToDelete);
-        if(nodeParent == null)
+        if(nodeParent == null) // nodeToDelete was the root
             root = null;
-        while (nodeParent != null) {
+        while (nodeParent != null) { // loop that updates the height of each node in the route
             newHeight(nodeParent);
             nodeParent = nodeParent.parent;
         }
     }
 
-
+    // function that updates the pointer of the parent to its son after the rotation
     private void newPointer (Node rotationNode){
         if (rotationNode.parent != null){
             if (rotationNode.parent.value > rotationNode.value)
@@ -66,7 +66,7 @@ public class BacktrackingAVL extends AVLTree {
             root = rotationNode;
     }
 
-
+    // function that deletes the node
     private void deleteNode(Node nodeToDelete) {
         if(nodeToDelete == root)
             root = null;
@@ -81,6 +81,7 @@ public class BacktrackingAVL extends AVLTree {
             }
         }
     }
+    // function that updates the height of the parent to its son after the rotation
     private void newHeight(Node node) {
         node.height = Math.max(getNodeHeight(node.left), getNodeHeight(node.right)) + 1;
     }

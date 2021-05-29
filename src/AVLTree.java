@@ -14,7 +14,7 @@ public class AVLTree implements Iterable<Integer> {
     }
 
     protected Node root;
-    protected Deque<Object> backtrackDeque = new LinkedList<>();
+    protected Deque<Object> backtrackDeque = new LinkedList<>(); // creating a data structure that contains the changes
 
     //You may add fields here.
     
@@ -31,9 +31,9 @@ public class AVLTree implements Iterable<Integer> {
 		/* 1.  Perform the normal BST search and insert */
         if (node == null) {
         	Node inserted_node = new Node(value);
-            backtrackDeque.addLast(inserted_node);
-            backtrackDeque.addLast(null);
-            backtrackDeque.addLast(null);
+            backtrackDeque.addLast(inserted_node); // adding the node that inserted - wich will be the node we delete
+            backtrackDeque.addLast(null); // adding the first node that out of balance
+            backtrackDeque.addLast(null); // adding the imbalance case
             return inserted_node;
         }
 
@@ -56,7 +56,7 @@ public class AVLTree implements Iterable<Integer> {
         // Left Left Case
         int balance = getBalanceFactor(node);
         boolean unBalanced = balance > 1 || balance < -1;
-        if (unBalanced){
+        if (unBalanced){ // checking wether we need to update the first node that out of balance
             Node tmpCase = (Node)backtrackDeque.pollLast();
             Node tmpFirstOutOfBalance = (Node)backtrackDeque.pollLast();
             if(tmpFirstOutOfBalance == null) {
@@ -69,8 +69,7 @@ public class AVLTree implements Iterable<Integer> {
             }
         }
 
-
-
+        // adding the specific imbalance case
         // Left Cases
         if (balance > 1) {
             if (value > node.left.value) {
